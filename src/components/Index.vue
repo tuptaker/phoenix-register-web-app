@@ -2,74 +2,32 @@
   <q-layout>
     <div slot="header" class="toolbar">
       <q-toolbar-title :padding="0">
-        Phoenix Point Buddy <!-- v{{$q.version}} -->
+        Phoenix Point Buddy
       </q-toolbar-title>
     </div>
-
-    <!--
-      Replace following "div" with
-      "<router-view class="layout-view">" component
-      if using subRoutes
-    -->
     <div class="layout-view">
-      <pb-login></pb-login>
+      <q-tabs :refs="$refs" default-tab="login-tab">
+        <q-tab name="login-tab">
+          Login
+        </q-tab>
+        <q-tab name="register-tab">
+          Register
+        </q-tab>
+      </q-tabs>
+      <div ref="login-tab"><pb-login></pb-login></div>
+      <div ref="register-tab"><pb-register></pb-register></div>
     </div>
   </q-layout>
 </template>
 
 <script>
-var moveForce = 30
-var rotateForce = 40
-
-import { Utils } from 'quasar'
 import pblogin from './PBLogin.vue'
+import pbregister from './PBRegister.vue'
 
 export default {
-  data () {
-    return {
-      moveX: 0,
-      moveY: 0,
-      rotateY: 0,
-      rotateX: 0
-    }
-  },
   components: {
-    'pb-login': pblogin
-  },
-  computed: {
-    position () {
-      let transform = `rotateX(${this.rotateX}deg) rotateY(${this.rotateY}deg)`
-      return {
-        top: this.moveY + 'px',
-        left: this.moveX + 'px',
-        '-webkit-transform': transform,
-        '-ms-transform': transform,
-        transform
-      }
-    }
-  },
-  methods: {
-    move (event) {
-      const {width, height} = Utils.dom.viewport()
-      const {top, left} = Utils.event.position(event)
-      const halfH = height / 2
-      const halfW = width / 2
-
-      this.moveX = (left - halfW) / halfW * -moveForce
-      this.moveY = (top - halfH) / halfH * -moveForce
-      this.rotateY = (left / width * rotateForce * 2) - rotateForce
-      this.rotateX = -((top / height * rotateForce * 2) - rotateForce)
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      document.addEventListener('mousemove', this.move)
-      document.addEventListener('touchmove', this.move)
-    })
-  },
-  beforeDestroy () {
-    document.removeEventListener('mousemove', this.move)
-    document.removeEventListener('touchmove', this.move)
+    'pb-login': pblogin,
+    'pb-register': pbregister
   }
 }
 </script>
